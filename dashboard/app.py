@@ -107,7 +107,7 @@ def show_kpis(txn):
 def revenue_trend(txn):
     monthly = (
         txn.set_index("transaction_date")
-        .resample("M")[["revenue","gross_profit"]]
+        .resample("ME")[["revenue","gross_profit"]]
         .sum()
         .reset_index()
     )
@@ -263,6 +263,7 @@ def cohort_heatmap(txn):
     retention = cohort_pivot.divide(sizes, axis=0).round(3) * 100
 
     plot_data = retention.iloc[-18:, :12].astype(float)
+    plot_data.index = plot_data.index.astype(str)
 
     fig = px.imshow(
         plot_data,
